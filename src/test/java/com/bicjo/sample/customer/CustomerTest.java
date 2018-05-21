@@ -1,5 +1,6 @@
 package com.bicjo.sample.customer;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
@@ -31,6 +32,20 @@ public class CustomerTest {
 
 		assertEquals(Long.valueOf(101l), customer.getId());
 		assertEquals("joven", customer.getName());
+
+	}
+
+	@Test
+	public void serialize() throws IOException {
+
+		Customer customer = new Customer();
+		customer.setId(101l);
+		customer.setName("joven");
+
+		assertThat(json.write(customer))//
+				.hasJsonPathStringValue("@.name");
+		assertThat(json.write(customer))//
+				.extractingJsonPathStringValue("@.name").isEqualTo("joven");
 
 	}
 
