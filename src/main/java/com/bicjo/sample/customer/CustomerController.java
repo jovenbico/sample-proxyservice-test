@@ -19,12 +19,12 @@ public class CustomerController {
 	@Autowired
 	private CustomerService customerService;
 
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<Resources<Customer>> getCustomers() {
 
 		List<Customer> customers = customerService.getCustomers();
 
-		return ResponseEntity.ok(new Resources<>(customers));
+		return ResponseEntity.ok(new CustomerResources(customers));
 	}
 
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
