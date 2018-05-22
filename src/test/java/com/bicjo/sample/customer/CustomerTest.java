@@ -2,12 +2,12 @@ package com.bicjo.sample.customer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.stream.Stream;
+import java.nio.file.Paths;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +22,23 @@ public class CustomerTest {
 
 	@Autowired
 	private JacksonTester<Customer> json;
+
+	@Autowired
+	private JacksonTester<List<Customer>> jsonCustomerResources;
+
+	@Test
+	public void deserializeCustomers() throws IOException {
+		String jsonString = readFileToString("src/test/resources/customers.json");
+
+		List<Customer> customers = jsonCustomerResources//
+				.parse(jsonString)//
+				.getObject();
+
+		for (Customer c : customers) {
+			assertNotNull(c.getId());
+			assertNotNull(c.getName());
+		}
+	}
 
 	@Test
 	public void deserialize() throws IOException {
@@ -50,18 +67,12 @@ public class CustomerTest {
 	}
 
 	private String readFileToString(String filename) {
-		StringBuilder data = new StringBuilder();
 		try {
-			Path path = new File(filename).toPath();
-			Stream<String> lines = Files.lines(path);
-			lines.forEach(line -> data.append(line).append("\n"));
-			lines.close();
+			return new String(Files.readAllBytes(Paths.get(filename)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		return data.toString();
-
+		return null;
 	}
 
 }

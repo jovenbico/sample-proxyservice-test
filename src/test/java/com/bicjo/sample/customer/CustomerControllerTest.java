@@ -39,6 +39,7 @@ public class CustomerControllerTest {
 
 		String body = restTemplate.getForObject("/customers", String.class, 101l);
 		assertNotNull(body);
+		System.out.println(body);
 	}
 
 	@Test
