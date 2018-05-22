@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Test;
@@ -40,8 +40,14 @@ public class CustomerControllerTest {
 		given(customerService.getCustomers())//
 				.willReturn(customers);
 
+		// Traverson t = new Traverson(new URI("http://localhost/customers"),
+		// MediaTypes.HAL_JSON);
+
 		String body = restTemplate.getForObject("/customers", String.class);
 		System.out.println(body);
+
+		ResponseEntity<CustomerResources> entityBody = restTemplate.getForEntity("/customers", CustomerResources.class);
+		System.out.println(entityBody.getBody());
 
 		// ResponseEntity<CustomerResources> customerResources //
 		// = restTemplate.getForEntity("/customers", CustomerResources.class);
@@ -55,7 +61,7 @@ public class CustomerControllerTest {
 		ResponseEntity<CustomerResources> customerResources //
 				= restTemplate.exchange("/customers", HttpMethod.GET, null,
 						ParameterizedTypeReference.forType(CustomerResources.class), //
-						new HashMap<String, String>());
+						Collections.emptyMap());
 
 		System.out.println(customerResources.getBody());
 	}
