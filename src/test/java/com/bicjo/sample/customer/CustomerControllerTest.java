@@ -1,7 +1,11 @@
 package com.bicjo.sample.customer;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.BDDMockito.given;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +27,22 @@ public class CustomerControllerTest {
 	private CustomerService customerService;
 
 	@Test
-	public void restCall() {
+	public void customers() {
+
+		List<Customer> customers = new ArrayList<>();
+		customers.add(new Customer(101l, "joven"));
+		customers.add(new Customer(102l, "rose"));
+		customers.add(new Customer(103l, "chance"));
+
+		given(customerService.getCustomers())//
+				.willReturn(customers);
+
+		String body = restTemplate.getForObject("/customers", String.class, 101l);
+		assertNotNull(body);
+	}
+
+	@Test
+	public void customerById() {
 
 		Customer customer = new Customer();
 		customer.setId(101l);
@@ -32,7 +51,7 @@ public class CustomerControllerTest {
 		given(customerService.getCustomer())//
 				.willReturn(customer);
 
-		String body = restTemplate.getForObject("/customers", String.class);
+		String body = restTemplate.getForObject("/customers/{id}", String.class, 101l);
 
 		assertEquals("{\"id\":101,\"name\":\"joven\"}", body);
 	}
